@@ -7,6 +7,7 @@ import (
 	"github.com/micro-gis/users-api/services"
 	"github.com/micro-gis/users-api/utils/errors"
 	"net/http"
+	"strconv"
 )
 
 func CreateUser(c *gin.Context) {
@@ -18,7 +19,7 @@ func CreateUser(c *gin.Context) {
 	}
 	result, saveErr := services.CreateUser(user)
 	if saveErr != nil {
-		//TODO : handle user creation error
+		c.JSON(saveErr.Status, saveErr)
 		return
 	}
 	c.JSON(http.StatusCreated, result)
@@ -26,5 +27,19 @@ func CreateUser(c *gin.Context) {
 }
 
 func GetUser(c *gin.Context) {
-	c.String(http.StatusNotImplemented, "Implement Me !")
+
+	// Check for userid passed as number
+	userId, err := strconv.ParseInt(c.Param("user_id"), 10, 64)
+	if err != nil {
+		err := errors.NewBadRequestError("user id should be a number")
+		c.JSON(err.Status, err)
+		return
+	}
+
+	user, getErr := services.GetUser(userId)
+	if getErr != nil {
+		c.JSON(getErr.Status, getErr)
+		return
+	}
+	c.JSON(http.StatusOK, user)
 }
