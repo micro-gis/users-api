@@ -2,6 +2,7 @@ package users
 
 import (
 	"fmt"
+	"github.com/micro-gis/users-api/utils/date"
 	"github.com/micro-gis/users-api/utils/errors"
 )
 
@@ -32,6 +33,7 @@ func (user *User) Save() *errors.RestErr {
 		}
 		return errors.NewBadRequestError(fmt.Sprintf("user %d already exist", current.Id))
 	}
+	user.DateCreated = date.GetNowString()
 	userDB[user.Id] = user
 	return nil
 }
