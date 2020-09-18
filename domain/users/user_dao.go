@@ -7,6 +7,12 @@ import (
 	"github.com/micro-gis/users-api/utils/errors"
 )
 
+const (
+	queryInsertUser = (
+		"INSERT INTO users(first_name, last_name, email, date_created VALUES(?, ?, ?, ?);"
+)
+)
+
 var (
 	userDB = make(map[int64]*User)
 )
@@ -32,6 +38,14 @@ func (user *User) Get() *errors.RestErr {
 }
 
 func (user *User) Save() *errors.RestErr {
+	stmt, err := users_db.Client.Prepare(queryInsertUser)
+	if err != nil {
+		return errors.NewInternalServerError(err.Error())
+	}
+	defer stmt.Close()
+
+	//TODO : execute stmt
+	
 	current := userDB[user.Id]
 	if current != nil {
 		if current.Email == user.Email {
