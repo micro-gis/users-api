@@ -12,7 +12,7 @@ type RestErr struct {
 }
 
 func (e *RestErr) Error() string {
-	return fmt.Sprintf("%d:%d: RestError", e.Message, e.Status)
+	return fmt.Sprintf("REST ERROR : %d:%d", e.Message, e.Status)
 }
 
 func NewBadRequestError(message string) *RestErr {
