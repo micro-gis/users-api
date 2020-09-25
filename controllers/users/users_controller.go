@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-func CreateUser(c *gin.Context) {
+func Create(c *gin.Context) {
 	var user users.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		restErr := errors.NewBadRequestError(fmt.Sprintf("invalid json : %s", err.Error()))
@@ -26,7 +26,7 @@ func CreateUser(c *gin.Context) {
 
 }
 
-func GetUser(c *gin.Context) {
+func Get(c *gin.Context) {
 
 	// Check for userid passed as number
 	userId, err := strconv.ParseInt(c.Param("user_id"), 10, 64)
@@ -44,7 +44,7 @@ func GetUser(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
-func UpdateUser(c *gin.Context) {
+func Update(c *gin.Context) {
 	// Check for userid passed as number
 	userId, err := strconv.ParseInt(c.Param("user_id"), 10, 64)
 	if err != nil {
