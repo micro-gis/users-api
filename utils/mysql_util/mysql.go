@@ -1,9 +1,9 @@
-package mysql_utils
+package mysql_util
 
 import (
 	"fmt"
 	"github.com/go-sql-driver/mysql"
-	"github.com/micro-gis/users-api/utils/errors"
+	"github.com/micro-gis/users-api/utils/errors_util"
 	"strings"
 )
 

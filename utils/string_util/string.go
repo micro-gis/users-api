@@ -1,4 +1,4 @@
-package string_utils
+package string_util
 
 import "strings"
 
