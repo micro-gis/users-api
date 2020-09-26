@@ -2,6 +2,7 @@ package errors
 
 import (
 	"fmt"
+	"errors"
 	"net/http"
 )
 
@@ -9,6 +10,10 @@ type RestErr struct {
 	Message string `json:"message"`
 	Status  int    `json:"status"`
 	Err     string `json:"error"`
+}
+
+func NewError(msg string) error {
+	return errors.New(msg)
 }
 
 func (e *RestErr) Error() string {
