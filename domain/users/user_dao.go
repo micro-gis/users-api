@@ -3,8 +3,8 @@ package users
 import (
 	"fmt"
 	"github.com/micro-gis/users-api/datasources/mysql/users_db"
-	"github.com/micro-gis/users-api/utils/errors"
-	"github.com/micro-gis/users-api/utils/mysql_utils"
+	"github.com/micro-gis/users-api/utils/errors_util"
+	"github.com/micro-gis/users-api/utils/mysql_util"
 )
 
 const (
@@ -27,7 +27,7 @@ func (user *User) Get() *errors.RestErr {
 
 	result := stmt.QueryRow(user.Id)
 	if err := result.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Email, &user.DateCreated, &user.Status); err != nil {
-		return mysql_utils.ParseError(err)
+		return mysql_util.ParseError(err)
 	}
 
 	return nil
@@ -41,11 +41,11 @@ func (user *User) Save() *errors.RestErr {
 	defer stmt.Close()
 	insertResult, err := stmt.Exec(user.FirstName, user.LastName, user.Email, user.DateCreated, user.Status, user.Password)
 	if err != nil {
-		return mysql_utils.ParseError(err)
+		return mysql_util.ParseError(err)
 	}
 	userId, err := insertResult.LastInsertId()
 	if err != nil {
-		return mysql_utils.ParseError(err)
+		return mysql_util.ParseError(err)
 	}
 	user.Id = userId
 	return nil
@@ -61,7 +61,7 @@ func (user *User) Update() *errors.RestErr {
 	_, err = stmt.Exec(user.FirstName, user.LastName, user.Email, user.Id)
 
 	if err != nil {
-		return mysql_utils.ParseError(err)
+		return mysql_util.ParseError(err)
 	}
 	return nil
 
@@ -74,12 +74,12 @@ func (user *User) Delete() *errors.RestErr {
 	}
 	defer stmt.Close()
 	if _, err = stmt.Exec(user.Id); err != nil {
-		return mysql_utils.ParseError(err)
+		return mysql_util.ParseError(err)
 	}
 	return nil
 }
 
-func (user *User) FindByStatus(status string) ([]User, *errors.RestErr) {
+func (user *User) FindByStatus(status string) (Users, *errors.RestErr) {
 	stmt, err := users_db.Client.Prepare(queryFindUserByStatus)
 	if err != nil {
 		return nil, errors.NewInternalServerError(err.Error())
@@ -96,7 +96,7 @@ func (user *User) FindByStatus(status string) ([]User, *errors.RestErr) {
 	for rows.Next() {
 		var user User
 		if err := rows.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Email, &user.DateCreated, &user.Status); err != nil {
-			return nil, mysql_utils.ParseError(err)
+			return nil, mysql_util.ParseError(err)
 		}
 		results = append(results, user)
 	}
