@@ -8,13 +8,13 @@ import (
 )
 
 const (
-	errNoRows = "no rows in result set"
+	ErrNoRows = "no rows in result set"
 )
 
 func ParseError(err error) *errors.RestErr {
 	sqlErr, ok := err.(*mysql.MySQLError)
 	if !ok {
-		if strings.Contains(err.Error(), errNoRows) {
+		if strings.Contains(err.Error(), ErrNoRows) {
 			return errors.NewNotFoundError(fmt.Sprintf("no record matching giver id"))
 		}
 		return errors.NewInternalServerError(fmt.Sprintf("Error when trying to save user : %s\n ", err.Error()))

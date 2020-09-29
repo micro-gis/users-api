@@ -17,7 +17,7 @@ type PrivatelUser struct {
 	Status      string `json:"status"`
 }
 
-func (users Users) Marshal(isPublic bool) []interface{} {
+func (users Users) Marshall(isPublic bool) []interface{} {
 	result := make([]interface{}, len(users))
 	for i, user := range users {
 		result[i] = user.Marshall(isPublic)
