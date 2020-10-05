@@ -6,6 +6,7 @@ import (
 	"github.com/micro-gis/users-api/domain/users"
 	"github.com/micro-gis/users-api/services"
 	"github.com/micro-gis/users-api/utils/errors_util"
+	"github.com/micro-gis/oauth-go/oauth"
 	"net/http"
 	"strconv"
 )
@@ -36,6 +37,22 @@ func Create(c *gin.Context) {
 }
 
 func Get(c *gin.Context) {
+	if err := oauth.AuthenticateRequest(c.Request); err != nil {
+		c.JSON(err.Status, err)
+		return
+	}
+
+	// For forcing authentication
+	if callerId := oauth.GetCallerId(c.Request); callerId == 0 {
+		err := errors.RestErr{
+			Status:  http.StatusUnauthorized,
+			Message: "Authentication required",
+			Err:     "unauthorized",
+		}
+		c.JSON(err.Status, err)
+		return
+	}
+
 	userId, err := getUserId(c.Param("user_id"))
 	if err != nil {
 		c.JSON(err.Status, err)
@@ -47,7 +64,11 @@ func Get(c *gin.Context) {
 		c.JSON(getErr.Status, getErr)
 		return
 	}
-	c.JSON(http.StatusOK, user.Marshall(c.GetHeader("X-Public") == "true"))
+	if oauth.GetCallerId(c.Request) == user.Id {
+		c.JSON(http.StatusOK, user.Marshall(false))
+		return
+	}
+	c.JSON(http.StatusOK, user.Marshall(oauth.IsPublic(c.Request)))
 }
 
 func Update(c *gin.Context) {
@@ -71,7 +92,8 @@ func Update(c *gin.Context) {
 		c.JSON(resterr.Status, resterr)
 		return
 	}
-	c.JSON(http.StatusOK, result.Marshall(c.GetHeader("X-Public") == "true"))
+
+	c.JSON(http.StatusOK, result.Marshall(oauth.IsPublic(c.Request)))
 }
 
 func Delete(c *gin.Context) {
