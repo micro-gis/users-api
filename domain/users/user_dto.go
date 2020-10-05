@@ -1,7 +1,7 @@
 package users
 
 import (
-	"github.com/micro-gis/users-api/utils/errors_util"
+	errors "github.com/micro-gis/utils/rest_errors"
 	"strings"
 )
 

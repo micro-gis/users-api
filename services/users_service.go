@@ -4,7 +4,7 @@ import (
 	"github.com/micro-gis/users-api/domain/users"
 	"github.com/micro-gis/users-api/utils/crypto_util"
 	"github.com/micro-gis/users-api/utils/date_util"
-	"github.com/micro-gis/users-api/utils/errors_util"
+	errors "github.com/micro-gis/utils/rest_errors"
 	"github.com/micro-gis/users-api/utils/string_util"
 )
 

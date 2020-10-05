@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/micro-gis/users-api/domain/users"
 	"github.com/micro-gis/users-api/services"
-	"github.com/micro-gis/users-api/utils/errors_util"
+	errors "github.com/micro-gis/utils/rest_errors"
 	"github.com/micro-gis/oauth-go/oauth"
 	"net/http"
 	"strconv"
