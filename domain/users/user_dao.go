@@ -18,7 +18,7 @@ const (
 	queryFindByEmailAndPassword = "SELECT id, first_name, last_name, email, date_created, status FROM users WHERE email=? AND password=? AND status=?;"
 )
 
-func (user *User) Get() *errors.RestErr {
+func (user *User) Get() errors.RestErr {
 	stmt, err := users_db.Client.Prepare(queryGetUser)
 	if err != nil {
 		logger.Error("error when trying to prepare get user statement", err)
@@ -35,7 +35,7 @@ func (user *User) Get() *errors.RestErr {
 	return nil
 }
 
-func (user *User) FindByEmailAndPassword() *errors.RestErr {
+func (user *User) FindByEmailAndPassword() errors.RestErr {
 	stmt, err := users_db.Client.Prepare(queryFindByEmailAndPassword)
 	if err != nil {
 		logger.Error("error when trying to prepare find user by email and password", err)
@@ -55,7 +55,7 @@ func (user *User) FindByEmailAndPassword() *errors.RestErr {
 	return nil
 }
 
-func (user *User) Save() *errors.RestErr {
+func (user *User) Save() errors.RestErr {
 	stmt, err := users_db.Client.Prepare(queryInsertUser)
 	if err != nil {
 		logger.Error("error when trying to prepare insert user statement", err)
@@ -76,7 +76,7 @@ func (user *User) Save() *errors.RestErr {
 	return nil
 }
 
-func (user *User) Update() *errors.RestErr {
+func (user *User) Update() errors.RestErr {
 	stmt, err := users_db.Client.Prepare(queryUpdateUser)
 	if err != nil {
 		logger.Error("error when trying to prepare update user statement", err)
@@ -94,7 +94,7 @@ func (user *User) Update() *errors.RestErr {
 
 }
 
-func (user *User) Delete() *errors.RestErr {
+func (user *User) Delete() errors.RestErr {
 	stmt, err := users_db.Client.Prepare(queryDeleteUser)
 	if err != nil {
 		logger.Error("error when trying to prepare delete user statement", err)
@@ -108,7 +108,7 @@ func (user *User) Delete() *errors.RestErr {
 	return nil
 }
 
-func (user *User) FindByStatus(status string) (Users, *errors.RestErr) {
+func (user *User) FindByStatus(status string) (Users, errors.RestErr) {
 	stmt, err := users_db.Client.Prepare(queryFindByStatus)
 	if err != nil {
 		logger.Error("error when trying to prepare Find user statement", err)
