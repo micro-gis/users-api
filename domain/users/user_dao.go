@@ -3,9 +3,9 @@ package users
 import (
 	"fmt"
 	"github.com/micro-gis/users-api/datasources/mysql/users_db"
-	"github.com/micro-gis/users-api/logger"
-	errors "github.com/micro-gis/utils/rest_errors"
 	"github.com/micro-gis/users-api/utils/mysql_util"
+	"github.com/micro-gis/utils/logger"
+	errors "github.com/micro-gis/utils/rest_errors"
 	"strings"
 )
 

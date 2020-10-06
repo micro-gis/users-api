@@ -36,6 +36,8 @@ github.com/mattn/go-isatty v0.0.12/go.mod h1:cbi8OIDigv2wuxKPP5vlRcQ1OAZbq2CE4Ky
 github.com/micro-gis/oauth-go v0.0.0-20201001073003-24e0a5f041fd h1:WEmqzI+wGUrm8oKJSXRIcWYaG6nEojQr+5iq7BSN6Qo=
 github.com/micro-gis/oauth-go v0.0.0-20201001073003-24e0a5f041fd/go.mod h1:lGAb9dQKHaaKug4vbMiQnrvXUANfjBY7pjEx9zN100o=
 github.com/micro-gis/utils v0.0.0-20201005100418-020b909c717d h1:lAu3dn+0dEf89BkVI8VxwKvHairX8gnXWoVIjYv3oiA=
+github.com/micro-gis/utils v0.0.0-20201006154619-32709127eeff h1:um9Kij/5K9ag2KN+6W82c8BPzEeNugoZ5HTnFVdCTCc=
+github.com/micro-gis/utils v0.0.0-20201006154619-32709127eeff/go.mod h1:RmPffrG9wv1/erNOgSr3wnDMVY8NTb9JeF2ITnxij80=
 github.com/micro-gis/utils/rest_errors v0.0.0-20201005100418-020b909c717d h1:kzj0gIXyYlItokaOU29JIU6OkISXzl5QfrS+fPWCvsA=
 github.com/micro-gis/utils/rest_errors v0.0.0-20201005100418-020b909c717d/go.mod h1:DALCS78D3tHdStxfNDBndXLNrkDZ2ruMbJy4BlF07kM=
 github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 h1:ZqeYNhU3OHLH3mGKHDcjJRFFRrJa6eAM5H+CtDdOsPc=

@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/micro-gis/users-api/logger"
+	"github.com/micro-gis/utils/logger"
 )
 
 var (
