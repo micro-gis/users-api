@@ -3,6 +3,8 @@ package users_db
 import (
 	"database/sql"
 	"fmt"
+	"github.com/go-sql-driver/mysql"
+	"github.com/micro-gis/utils/logger"
 	"log"
 	_ "github.com/go-sql-driver/mysql"
 	"os"
@@ -38,6 +40,7 @@ func init() {
 	if connErr = Client.Ping(); connErr != nil {
 		panic(connErr)
 	}
+	mysql.SetLogger(logger.GetLogger())
 	log.Println("database successfully configured")
 
 }

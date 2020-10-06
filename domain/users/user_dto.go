@@ -1,7 +1,7 @@
 package users
 
 import (
-	"github.com/micro-gis/users-api/utils/errors_util"
+	errors "github.com/micro-gis/utils/rest_errors"
 	"strings"
 )
 
@@ -21,7 +21,7 @@ type User struct {
 
 type Users []User
 
-func (user *User) Validate() *errors.RestErr {
+func (user *User) Validate() errors.RestErr {
 	user.FirstName = strings.TrimSpace(user.FirstName)
 	user.LastName = strings.TrimSpace(user.LastName)
 	user.Email = strings.TrimSpace(strings.ToLower(user.Email))
