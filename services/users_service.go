@@ -51,13 +51,13 @@ func (s *userService) UpdateUser(isPartial bool, user users.User) (*users.User, 
 	}
 
 	if isPartial {
-		if string_util.IsEmptyString(user.FirstName) {
+		if ! string_util.IsEmptyString(user.FirstName) {
 			current.FirstName = user.FirstName
 		}
-		if string_util.IsEmptyString(user.LastName) {
+		if ! string_util.IsEmptyString(user.LastName) {
 			current.LastName = user.LastName
 		}
-		if string_util.IsEmptyString(user.Email) {
+		if ! string_util.IsEmptyString(user.Email) {
 			current.Email = user.Email
 		}
 	} else {

@@ -132,7 +132,7 @@ func (user *User) FindByStatus(status string) (Users, errors.RestErr) {
 		results = append(results, user)
 	}
 	if len(results) == 0 {
-		return nil, mysql_util.ParseError(err)
+		return nil, errors.NewNotFoundError("no records were found")
 	}
 	return results, nil
 
