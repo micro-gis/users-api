@@ -6,6 +6,7 @@ import (
 	"github.com/micro-gis/oauth-go/oauth"
 	"github.com/micro-gis/users-api/domain/users"
 	"github.com/micro-gis/users-api/services"
+	"github.com/micro-gis/users-api/utils/authenticate_utils"
 	errors "github.com/micro-gis/utils/rest_errors"
 	"net/http"
 	"strconv"
@@ -21,6 +22,10 @@ func getUserId(userIdParam string) (int64, errors.RestErr) {
 }
 
 func Create(c *gin.Context) {
+	if err := authenticate_utils.AuthenticateRequest(c, true); err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
 	var user users.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		restErr := errors.NewBadRequestError(fmt.Sprintf("invalid json : %s", err.Error()))
@@ -37,14 +42,7 @@ func Create(c *gin.Context) {
 }
 
 func Get(c *gin.Context) {
-	if err := oauth.AuthenticateRequest(c.Request); err != nil {
-		c.JSON(err, err)
-		return
-	}
-
-	// For forcing authentication
-	if callerId := oauth.GetCallerId(c.Request); callerId == 0 {
-		err := errors.NewRestError("Authentication required", http.StatusUnauthorized, "unauthorized", nil)
+	if err := authenticate_utils.AuthenticateRequest(c, false); err != nil {
 		c.JSON(err.Status(), err)
 		return
 	}
