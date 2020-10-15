@@ -22,7 +22,7 @@ func getUserId(userIdParam string) (int64, errors.RestErr) {
 }
 
 func Create(c *gin.Context) {
-	if err := authenticate_utils.AuthenticateRequest(c, true); err != nil {
+	if err := authenticate_utils.AuthenticateRequest(c, true, 0); err != nil {
 		c.JSON(err.Status(), err)
 		return
 	}
@@ -42,16 +42,18 @@ func Create(c *gin.Context) {
 }
 
 func Get(c *gin.Context) {
-	if err := authenticate_utils.AuthenticateRequest(c, false); err != nil {
-		c.JSON(err.Status(), err)
-		return
-	}
-
 	userId, err := getUserId(c.Param("user_id"))
 	if err != nil {
 		c.JSON(err.Status(), err)
 		return
 	}
+
+	if err := authenticate_utils.AuthenticateRequest(c, false, 0); err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+
+
 
 	user, getErr := services.UserService.GetUser(userId)
 	if getErr != nil {
@@ -72,10 +74,16 @@ func Update(c *gin.Context) {
 		return
 	}
 
+	if err := authenticate_utils.AuthenticateRequest(c, true, userId); err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+
 	var user users.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		restErr := errors.NewBadRequestError("Invalid json body")
 		c.JSON(restErr.Status(), restErr)
+		return
 	}
 
 	user.Id = userId
@@ -87,6 +95,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
+
 	c.JSON(http.StatusOK, result.Marshall(oauth.IsPublic(c.Request)))
 }
 
@@ -96,7 +105,16 @@ func Delete(c *gin.Context) {
 		c.JSON(err.Status(), err)
 		return
 	}
+	if err := authenticate_utils.AuthenticateRequest(c, true, userId); err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
 	if err := services.UserService.DeleteUser(userId); err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+	err = oauth.DeleteAllAccessToken(c.Request)
+	if err != nil {
 		c.JSON(err.Status(), err)
 		return
 	}
@@ -104,15 +122,17 @@ func Delete(c *gin.Context) {
 }
 
 func Search(c *gin.Context) {
+	if err := authenticate_utils.AuthenticateRequest(c, false, 0); err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
 	status := c.Query("status")
-
 	users, err := services.UserService.SearchUser(status)
 	if err != nil {
 		c.JSON(err.Status(), err)
 		return
 	}
-
-	c.JSON(http.StatusOK, users.Marshall(c.GetHeader("X-Public") == "true"))
+	c.JSON(http.StatusOK, users.Marshall(oauth.IsPublic(c.Request)))
 }
 
 func Login(c *gin.Context) {

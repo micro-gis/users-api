@@ -8,11 +8,15 @@ services:
       MYSQL_USER: 'user'
       MYSQL_PASSWORD: 'password'
       MYSQL_ROOT_PASSWORD: 'password'
+
     ports:
       - '3306:3306'
     expose:
       - '3306'
+    command: --init-file /data/application/init.sql
     volumes:
-      - my-db:/var/lib/mysql_util
+      - ./init.sql:/data/application/init.sql
+      - ./data:/var/lib/mysql_util
+
 volumes:
   my-db:

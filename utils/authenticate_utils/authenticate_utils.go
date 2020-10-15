@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func AuthenticateRequest(c *gin.Context, forceAuth bool) errors.RestErr {
+func AuthenticateRequest(c *gin.Context, forceAuth bool, forceSameUserId int64) errors.RestErr {
 	if err := oauth.AuthenticateRequest(c.Request); err != nil {
 		return err
 	}
@@ -18,5 +18,13 @@ func AuthenticateRequest(c *gin.Context, forceAuth bool) errors.RestErr {
 			return err
 		}
 	}
+
+	if forceSameUserId != 0 {
+		if callerId := oauth.GetCallerId(c.Request); callerId != forceSameUserId {
+			err := errors.NewRestError("Authentication required", http.StatusUnauthorized, "unauthorized", nil)
+			return err
+		}
+	}
 	return nil
 }
+
